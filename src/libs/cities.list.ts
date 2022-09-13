@@ -1,4 +1,14 @@
-export const cities = [
+export interface ICity {
+  id: number;
+  name: string;
+  country: string;
+  coord: {
+    lon: number;
+    lat: number;
+  };
+}
+
+export const cities: Array<ICity> = [
   {
     id: 0,
     name: 'London',

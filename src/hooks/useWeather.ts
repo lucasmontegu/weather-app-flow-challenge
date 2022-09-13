@@ -41,7 +41,7 @@ export const useWeather = (location: IGeoLocation | null) => {
     };
 
     fetchWeather();
-  }, []);
+  }, [location]);
 
   return { weather, error, isLoading };
 };

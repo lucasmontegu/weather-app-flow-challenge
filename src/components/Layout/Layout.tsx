@@ -3,7 +3,7 @@ import Head from 'next/head';
 import styles from './Layout.module.css';
 
 interface ILayout {
-  children: React.ReactElement;
+  children: React.ReactElement[] | React.ReactElement;
 }
 
 const Layout: React.FC<ILayout> = ({ children }) => {

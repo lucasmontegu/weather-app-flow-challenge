@@ -24,3 +24,33 @@ a {
     background: black;
   }
 }
+
+.Weather__container {
+  border: 1px solid #ccc;
+  padding: 2rem;
+  border-radius: 0.8rem;
+  background: transparent;
+}
+
+.Weather__container--dark {
+  border: 1px solid #ccc;
+  padding: 2rem;
+  border-radius: 0.8rem;
+  background: #333;
+}
+
+.Weather__current {
+  padding: 0 1rem 1.5rem;
+}
+
+.Weather__current--header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.Weather__current--location-name {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #333;
+}
