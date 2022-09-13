@@ -1,13 +1,14 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import Container from '../components/Container/Container';
 import Layout from '../components/Layout/Layout';
 import { useCurrentLocation } from '../hooks/useCurrentLocation';
 import { useWeather } from '../hooks/useWeather';
-import { Location } from 'iconsax-react';
+import { Drop, Location, Wind } from 'iconsax-react';
 import { getDayName } from '../utils/utils';
 import { cities, ICity } from '../libs/cities.list';
 import Backdrop from '../components/Backdrop/Backdrop';
 import Select from '../components/Select/Select';
+import Image from 'next/image';
 
 interface IGeoLocation {
   latitude: number;
@@ -15,29 +16,60 @@ interface IGeoLocation {
 }
 
 const Home = () => {
-  const [position, setPosition] = useState<IGeoLocation | null>({
-    latitude: -31.4320479,
-    longitude: -64.1845319,
-  });
-
-  // const { location, errorLocation } = useCurrentLocation();
+  const { location, errorLocation } = useCurrentLocation();
+  const [cityLocationName, setCityLocationName] = useState<string>('');
+  const [city, setCity] = useState<ICity | null>(null);
+  const [cityLocation, setCityLocation] = useState<IGeoLocation | null>(null);
+  const [position, setPosition] = useState<IGeoLocation | null>(null);
 
   const { weather, error, isLoading } = useWeather(position);
 
-  // const [currentLocation, setCurrentLocation] = useState<ICity | null>(null);
-  const [cityLocationName, setCityLocationName] = useState<string>('');
+  useEffect(() => {
+    if (location) {
+      setCityLocation({
+        latitude: location.latitude,
+        longitude: location.longitude,
+      });
 
-  const [city, setCity] = useState<ICity | null>(null);
+      setPosition({
+        latitude: location.latitude,
+        longitude: location.longitude,
+      });
+    }
+  }, [location]);
 
-  console.log('City: ', city);
+  const newCities: Array<ICity> = [...cities];
+
+  cityLocation &&
+    newCities.push({
+      id: cities.length + 1,
+      name: 'Mi ubicación',
+      country: 'Current Location',
+      coord: {
+        lat: cityLocation.latitude,
+        lon: cityLocation.longitude,
+      },
+    });
+
+  console.log('Location: ', location);
+  console.log('Error: ', errorLocation);
+  console.log('New Cities: ', newCities);
+  console.log('Error: ', error);
 
   useEffect(() => {
-    if (weather) {
+    if (
+      weather &&
+      location &&
+      weather.lat === location?.latitude &&
+      weather.lon === location?.longitude
+    ) {
       const arrTimezone = weather.timezone.split('/');
       const city = arrTimezone[arrTimezone.length - 1];
       setCityLocationName(city);
     }
-  }, [weather]);
+  }, [weather, location]);
+
+  console.log('City Location Name: ', cityLocationName);
 
   useEffect(() => {
     if (city) {
@@ -48,26 +80,14 @@ const Home = () => {
     }
   }, [city, setPosition]);
 
-  /* const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const search = e.target.value;
-    const filteredCities = cities.filter((city) => {
-      return city.name.toLowerCase().includes(search.toLowerCase());
-    });
-    setCityList(filteredCities);
-  }; */
-
-  /* useEffect(() => {
-    if (location) {
-      const { latitude, longitude } = location;
-
-
-      if(weather) {
-        console.log(weather);
-      } else {
-        console.log(error);
-      }
+  const handleCityChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const city = newCities.find(
+      (option) => option.id === Number(e.target.value)
+    );
+    if (city) {
+      setCity(city);
     }
-  }, [useWeather, location]); */
+  };
 
   return (
     <Layout>
@@ -79,31 +99,49 @@ const Home = () => {
               <div className="Weather__current--header">
                 <div className="Weather__current--location">
                   <h4 className="Weather__current--location-name">
-                    <Location size={20} /> {cityLocationName}
+                    <Location size={20} /> {city ? city.name : cityLocationName}
                   </h4>
                 </div>
 
                 <div className="Weather__location--container">
-                  <Select options={cities} value={city} onSelect={setCity} />
-                  {/* <select className="Weather__location--select">
-                    {cities
-                      .map((city) => (
-                        <option
-                          className="Weather__location--option"
-                          key={city.id * 1992}
-                          value={city.id}
-                        >
-                          {city.name}
-                        </option>
-                      ))
-                      .reverse()}
-                  </select> */}
+                  <Select
+                    options={newCities.reverse()}
+                    handleChange={handleCityChange}
+                  />
                 </div>
               </div>
-              <div>
-                <div className="Weather__current-day__temp">
-                  <span>{weather.current.temp}°</span>
-                  <span>{weather.current.weather[0].description}</span>
+              <div className="Weather__current-details--container">
+                <div className="Weather__current--details">
+                  <div className="Weather__current-item Weather__current-item--icon">
+                    <Image
+                      src={`http://openweathermap.org/img/wn/${weather.current.weather[0].icon}@2x.png`}
+                      alt="Icon Weather"
+                      width={80}
+                      height={80}
+                    />
+                  </div>
+                  <div className="Weather__current-item Weather__current-item--temp">
+                    <h5>{parseInt(weather.current.temp)}°</h5>
+                  </div>
+                  <div className="Weather__current-item Weather__current-item--description">
+                    <h5>{weather.current.weather[0].description}</h5>
+                  </div>
+                  <div className="Weather__current-item Weather__current-item--wind">
+                    <div>
+                      <Wind size="32" color="#f3f3f3" />
+                    </div>
+                    <div>
+                      <h5>{weather.current.wind_speed} m/s</h5>
+                    </div>
+                  </div>
+                  <div className="Weather__current-item Weather__current-item--humidity">
+                    <div>
+                      <Drop size="32" color="#f3f3f3" />
+                    </div>
+                    <div>
+                      <h5>{weather.current.humidity}%</h5>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -114,14 +152,18 @@ const Home = () => {
               weather.daily
                 .map((day, index) => {
                   return (
-                    <div key={index * 2991} style={{ display: 'flex' }}>
-                      <p style={{ marginRight: '12px' }}>{day.temp.day}</p>
-                      <p style={{ marginRight: '12px' }}>
-                        {day.weather[0].description}
-                      </p>
-                      <p style={{ marginRight: '12px' }}>
-                        {getDayName(day.dt, 'es', true)}
-                      </p>
+                    <div
+                      key={index * 2991}
+                      className="Weather__wrapper-next-day--item"
+                    >
+                      <Image
+                        src={`http://openweathermap.org/img/wn/${day.weather[0].icon}@2x.png`}
+                        alt="Icon Weather"
+                        width={50}
+                        height={50}
+                      />
+                      <p>{parseInt(day.temp.day)}°</p>
+                      <p>{getDayName(day.dt, 'es', true)}</p>
                     </div>
                   );
                 })

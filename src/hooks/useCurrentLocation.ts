@@ -28,8 +28,8 @@ interface GeolocationPosition {
 }
 
 export const useCurrentLocation = () => {
-  const [location, setLocation] = useState<IGeoLocation | null>(null);
-  const [error, setError] = useState<IGeoLocationError | null>(null);
+  const [location, setLocation] = useState<IGeoLocation | undefined>(undefined);
+  const [error, setError] = useState<IGeoLocationError | undefined>(undefined);
 
   const onChange = ({ coords }: GeolocationPosition) => {
     const { latitude, longitude } = coords;
