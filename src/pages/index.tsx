@@ -105,6 +105,7 @@ const Home = () => {
 
                 <div className="Weather__location--container">
                   <Select
+                    value={city}
                     options={newCities.reverse()}
                     handleChange={handleCityChange}
                   />
