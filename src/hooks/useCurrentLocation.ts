@@ -1,10 +1,5 @@
 import { useState, useEffect } from 'react';
 
-interface IGeoLocation {
-  latitude: number;
-  longitude: number;
-}
-
 interface IGeoLocationError {
   code: number;
   message: string;
@@ -28,12 +23,15 @@ interface GeolocationPosition {
 }
 
 export const useCurrentLocation = () => {
-  const [location, setLocation] = useState<IGeoLocation | undefined>(undefined);
+  const [latitude, setLatitude] = useState<number | null>(null);
+  const [longitude, setLongitude] = useState<number | null>(null);
   const [error, setError] = useState<IGeoLocationError | undefined>(undefined);
 
   const onChange = ({ coords }: GeolocationPosition) => {
     const { latitude, longitude } = coords;
-    setLocation({ latitude, longitude });
+
+    setLatitude(latitude);
+    setLongitude(longitude);
   };
 
   const onError = (error: IGeoLocationError) => {
@@ -56,5 +54,9 @@ export const useCurrentLocation = () => {
     return () => geo.clearWatch(watcher);
   }, []);
 
-  return { location, errorLocation: error };
+  if (!latitude || !longitude) {
+    return { loading: true };
+  }
+
+  return { loading: false, latitude, longitude, errorLocation: error };
 };

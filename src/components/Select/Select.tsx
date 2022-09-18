@@ -14,11 +14,11 @@ const Select: React.FC<ISelect> = ({ options, handleChange, value }) => {
       id="select-city"
       data-testid="select-city"
       className={styles.select}
-      value={value?.name}
+      value={value?.id}
       onChange={(e) => handleChange(e)}
       placeholder="Seleccionar ciudad"
     >
-      {options.map((option) => (
+      {options.map((option, idx) => (
         <option className={styles.option} key={option.id} value={option.id}>
           {option.name}
         </option>

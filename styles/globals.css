@@ -43,11 +43,11 @@ body.Weather__night {
 
 .Weather__container {
   padding: 2rem;
-  border-radius: 0.8rem;
+  /* border-radius: 0.8rem; */
   /* background: #f3f3f3; */
-  box-shadow: 1.5px 3px 5.4px rgba(0, 0, 0, 0.082),
+  /* box-shadow: 1.5px 3px 5.4px rgba(0, 0, 0, 0.082),
     3.7px 7.2px 15px rgba(0, 0, 0, 0.105),
-    8px 15.8px 36.2px rgba(0, 0, 0, 0.131), 30px 59px 120px rgba(0, 0, 0, 0.2);
+    8px 15.8px 36.2px rgba(0, 0, 0, 0.131), 30px 59px 120px rgba(0, 0, 0, 0.2); */
 }
 
 .Weather__container.Weather__background--day {
@@ -156,6 +156,7 @@ body.Weather__night {
   font-weight: 600;
   color: #f3f3f3;
   margin: 0;
+  text-transform: capitalize;
 }
 
 .Weather__current-item.Weather__current-item--humidity,
@@ -163,12 +164,33 @@ body.Weather__night {
   display: flex;
   align-items: center;
   justify-content: center;
+  color: #f3f3f3;
 }
 
-.Weather__current-item.Weather__current-item--humidity h5,
-.Weather__current-item.Weather__current-item--wind h5 {
+.Weather__current-item.Weather__current-item--humidity span,
+.Weather__current-item.Weather__current-item--wind span {
+  font-size: 1.2rem;
+  font-weight: 400;
+  color: #f3f3f3;
+  margin: 1rem 0.8rem;
+  line-height: 1px;
+}
+
+.Weather__daily-item--icon {
+  text-align: center;
+}
+
+.Weather__daily-item--header p {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #f3f3f3;
+  margin: 0.4rem 0;
+}
+
+.Weather__wrapper-next--title {
   font-size: 1rem;
   font-weight: 400;
   color: #f3f3f3;
-  margin: 1rem;
+  margin: 0.4rem 0;
+  text-transform: uppercase;
 }
