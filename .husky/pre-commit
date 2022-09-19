@@ -22,10 +22,10 @@ npm run check-lint || (
 )
 
 # Check tests
-npm run test || (
-  echo '🧪⚠️🧪 Tests Failed. Fix tests and try commit again. 🧪⚠️🧪'
-  false;
-)
+#npm run test || (
+#  echo '🧪⚠️🧪 Tests Failed. Fix tests and try commit again. 🧪⚠️🧪'
+#  false;
+#)
 
 # If everything passes... try to run a build
 echo '⌛⌛⌛ ... Alright... Code looks good to me... Trying to build now. ⌛⌛⌛'

@@ -18,7 +18,7 @@ const Select: React.FC<ISelect> = ({ options, handleChange, value }) => {
       onChange={(e) => handleChange(e)}
       placeholder="Seleccionar ciudad"
     >
-      {options.map((option, idx) => (
+      {options.map((option) => (
         <option className={styles.option} key={option.id} value={option.id}>
           {option.name}
         </option>

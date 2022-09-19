@@ -20,7 +20,10 @@ const Home = () => {
   const { latitude, longitude } = useCurrentLocation();
   const [cityLocationName, setCityLocationName] = useState<string>('');
   const [city, setCity] = useState<ICity | null>(null);
-  const [position, setPosition] = useState<IGeoLocation>();
+  const [position, setPosition] = useState<IGeoLocation>({
+    latitude: 0,
+    longitude: 0,
+  });
 
   useEffect(() => {
     if (latitude && longitude) {
@@ -79,13 +82,45 @@ const Home = () => {
     }
   };
 
+  // Function that calculate is day, afternoon or night based on the current time and the sunrise and sunset time of the city
+  const getDayTime = (sunrise: number, sunset: number) => {
+    const currentTime = new Date().getTime() / 1000;
+    const isDay = currentTime > sunrise && currentTime < sunset;
+    const isSunset = currentTime > sunset;
+    const isNight = currentTime < sunrise || currentTime > sunrise + 86400;
+
+    if (isDay) {
+      return 'morning';
+    } else if (isSunset) {
+      return 'sunset';
+    } else if (isNight) {
+      return 'night';
+    } else {
+      return 'morning';
+    }
+  };
+
+  const dayTime = getDayTime(weather?.current.sunrise, weather?.current.sunset);
+
+  console.log('Day time: ', dayTime);
+
+  useEffect(() => {
+    if (window !== undefined) {
+      const body = document.querySelector('body');
+      if (body) {
+        body.classList.remove('morning', 'night', 'sunset');
+        body.classList.add(dayTime);
+      }
+    }
+  }, [dayTime]);
+
   return (
     <Layout>
       {isLoading ? (
         <Backdrop show={isLoading} />
       ) : (
         <Container>
-          <div className="Weather__container">
+          <div className={`Weather__container`}>
             {weather && (
               <div className="Weather__current">
                 <div className="Weather__current--header">

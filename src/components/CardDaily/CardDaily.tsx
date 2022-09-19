@@ -39,7 +39,7 @@ interface ICardDaily {
 
 const CardDaily: React.FC<ICardDaily> = ({ daily }) => {
   return (
-    <div className="Weather__wrapper-next-days">
+    <div className="Weather__daily--container">
       <div className="Weather__wrapper-next--title">
         <FiCalendar
           size={20}
@@ -50,26 +50,36 @@ const CardDaily: React.FC<ICardDaily> = ({ daily }) => {
         />
         <span>Pronóstico para los próximos 5 días</span>
       </div>
-      {daily
-        .map((day) => (
-          <div className="Weather__wrapper-next-day--item" key={day.dt}>
-            <div className="Weather__daily-item--header">
-              <div className="Weather__daily-item--icon">
-                <Image
-                  src={`http://openweathermap.org/img/wn/${day.weather[0].icon}.png`}
-                  alt="Icon Weather"
-                  width={40}
-                  height={40}
-                />
+      <div className="Weather__wrapper-next-days">
+        {daily
+          .map((day) => (
+            <div className="Weather__wrapper-next-day--item" key={day.dt}>
+              <div className="Weather__daily-item--header">
+                <div className="Weather__daily-item--icon">
+                  <Image
+                    src={`http://openweathermap.org/img/wn/${day.weather[0].icon}.png`}
+                    alt="Icon Weather"
+                    width={40}
+                    height={40}
+                  />
+                </div>
+                <p className="Weather__daily-item--temp">
+                  {parseInt(`${day.temp.day}`)}°
+                </p>
+                <p className="Weather__daily-item--day">
+                  {getDayName(day.dt, 'es', true)}
+                </p>
+                <p className="Weather__daily-item--max-temp">
+                  Max.: {parseInt(`${day.temp.max}`)}°
+                </p>
+                <p className="Weather__daily-item--min-temp">
+                  Min.: {parseInt(`${day.temp.min}`)}°
+                </p>
               </div>
-              <p>{parseInt(`${day.temp.day}`)}°</p>
-              <p>{getDayName(day.dt, 'es', true)}</p>
-              <p>Max.: {day.temp.max}</p>
-              <p>Min.: {day.temp.min}</p>
             </div>
-          </div>
-        ))
-        .slice(0, 5)}
+          ))
+          .slice(0, 5)}
+      </div>
     </div>
   );
 };

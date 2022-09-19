@@ -35,8 +35,8 @@ const CardCurrentWeather: React.FC<ICardCurrentWeather> = ({ weather }) => {
           <Image
             src={`http://openweathermap.org/img/wn/${weather.current.weather[0].icon}@2x.png`}
             alt="Icon Weather"
-            width={80}
-            height={80}
+            width={110}
+            height={110}
           />
         </div>
         <div className="Weather__current-item Weather__current-item--temp">
